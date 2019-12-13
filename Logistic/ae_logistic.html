@@ -13091,7 +13091,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -13124,6 +13124,219 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">mlgcv</span> <span class="o">=</span> <span class="n">LogisticRegressionCV</span><span class="p">(</span><span class="n">Cs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span>
+                           <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;saga&#39;</span><span class="p">,</span>
+                           <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;multinomial&#39;</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+                           <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">,)</span>
+
+<span class="n">mlgcv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time elapsed: </span><span class="si">%.2f</span><span class="s1"> min&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=-1)]: Using backend ThreadingBackend with 12 concurrent workers.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>convergence after 8 epochs took 375 seconds
+convergence after 8 epochs took 376 seconds
+convergence after 8 epochs took 379 seconds
+convergence after 8 epochs took 379 seconds
+convergence after 8 epochs took 379 seconds
+convergence after 49 epochs took 3803 seconds
+convergence after 52 epochs took 4038 seconds
+convergence after 53 epochs took 4085 seconds
+convergence after 53 epochs took 4114 seconds
+convergence after 54 epochs took 4171 seconds
+convergence after 68 epochs took 8568 seconds
+convergence after 68 epochs took 8508 seconds
+convergence after 71 epochs took 8948 seconds
+convergence after 72 epochs took 9064 seconds
+convergence after 72 epochs took 9059 seconds
+convergence after 11 epochs took 1262 seconds
+convergence after 10 epochs took 1138 seconds
+convergence after 2 epochs took 230 seconds
+convergence after 7 epochs took 801 seconds
+convergence after 2 epochs took 220 seconds
+convergence after 7 epochs took 785 seconds
+convergence after 2 epochs took 200 seconds
+convergence after 2 epochs took 192 seconds
+convergence after 12 epochs took 1293 seconds
+convergence after 2 epochs took 183 seconds
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=-1)]: Done   5 out of   5 | elapsed: 248.6min finished
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Time elapsed: 273.29 min
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cvscore_train</span> <span class="o">=</span> <span class="n">mlgcv</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">cvscore_test</span> <span class="o">=</span> <span class="n">mlgcv</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;train accuracy:&#39;</span><span class="p">,</span> <span class="n">cvscore_train</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test accuracy:&#39;</span><span class="p">,</span> <span class="n">cvscore_test</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>train accuracy: 25.563768115942032
+test accuracy: 23.771014492753622
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlgcv</span><span class="o">.</span><span class="n">C_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000., 10000., 10000., 10000., 10000., 10000., 10000., 10000.,
+       10000.])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
@@ -13135,8 +13348,7 @@ div#notebook {
                          <span class="n">multi_class</span> <span class="o">=</span> <span class="s1">&#39;multinomial&#39;</span><span class="p">,</span>
                          <span class="n">n_jobs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                          <span class="n">verbose</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                         <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-                         <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+                         <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">)</span>
 <span class="n">mlg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time elapsed: </span><span class="si">%.2f</span><span class="s1"> min&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">))</span>
