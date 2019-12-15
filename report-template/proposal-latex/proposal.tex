@@ -30,15 +30,15 @@
 
 
 %%%%%%%%% TITLE
-\title{\LaTeX\ Template for STAT479 Project Proposal}
+\title{\LaTeX\ STAT479 Project Proposal}
 
-\author{First Author\\
-{\tt\small firstauthor@wisc.edu}
+\author{Tong Li\\
+{\tt\small tli287@wisc.edu}
 \and
-Second Author\\
+Runxin Gao\\
 {\tt\small secondauthor@wisc.edu}
 \and
-Third Author\\
+Jianian Jin\\
 {\tt\small thirdauthor@wisc.edu}
 }
 
@@ -53,26 +53,6 @@ Third Author\\
 
 
 %%%%%%%%% BODY TEXT
-
-
-
-\begin{itemize}
-
-	\item This template is based on the CVPR conference template\footnote{\url{http://statcourse2018.thecvf.com/submission/main_conference/author_guidelines}}.
-	
-	\item The information in this template is very minimal, and this file should serve you as a framework for writing your proposal. You may prefer to use a more collaboration-friendly tool while drafting the report with your class mates before you prepare the final report for submission. Remember that you should \textbf{submit both the report and code} you used for this project via Canvas. Also, \textbf{only one member per team} needs to submit the project material.
-	
-	\item The project proposal is a 2-4 page document excluding references\footnote{This means, references should of course be included but do not count towards the page limit}.
-	
-	\item You are encouraged (not required) to use 1-2 figures to illustrate technical concepts.
-	
-	\item The proposal must be formatted and submitted as a PDF document on Canvas (the submission deadline will be later announced via the schedule \& email).
-	
-	\item Please
-	check out the text in these sections for further information.
-	
-\end{itemize}
-
 
 
 
@@ -93,11 +73,10 @@ Figure \ref{fig:google-scholar-2col}.
 
 \begin{figure}[t]
 \begin{center}
-   \includegraphics[width=0.8\linewidth]{figures/google-scholar.pdf}
+   \includegraphics[width=0.8\linewidth]{figures/quickdraw_image.jpg}
 \end{center}
-   \caption{Example illustrating how to get BibTeX references from
-   Google Scholar as a 1-column figure.}
-\label{fig:google-scholar-1col}
+   \caption{Example of quick draw imgaes}
+\label{fig:quick draw image}
 \end{figure}
 
 
@@ -123,7 +102,11 @@ How do you measure success, specific to this project, from a technical standpoin
 
 \section{Resources}
 
-What resources are you going to use (datasets, computer hardware, computational tools, etc.)?
+Google has made its Quick! Draw dataset public with several versions, such as the original raw data, the simplified version of the raw data, as well as numpy bitmap data, built upon the simplified data, that converts the data into bitmaps with $28x28$ grayscale which has 784 dimensions. Because the aim is to classify drawings from Quick! Draw, we’ve decided to use to numpy bitmap data.
+
+
+This dataset consists of 345 categories and over fifty million drawings in total, which would make the computation time really long. Thus, we are planning to draw a random sample from each category to make computation faster. Then we would divide the sample into training, validation and test set for our model construction and evaluation.
+
 
 \section{Contributions}
 
