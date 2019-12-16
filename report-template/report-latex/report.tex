@@ -32,6 +32,8 @@
 %%%%%%%%% TITLE
 \title{What are you drawing? Classifying Goodle Quick Draw Doodles}
 
+%我忘记加上了random forest， 你们酌情在需要的地方加一下%
+
 \author{First Author\\
 {\tt\small firstauthor@wisc.edu}
 \and
@@ -86,38 +88,17 @@ In our project, rather than building seperate algorithms for each category or su
 
 \section{Related Work}
 
-Related work should be discussed here. This is an example of a citation. To format the citations properly, put the
-corresponding references into the bibliography.bib file. You can obtain
-BibTeX-formatted references for the "bib" file from Google Scholar 
-(\url{https://scholar.google.com}), for example, by clicking on the 
-double-quote character under a citation and then selecting \mbox{"BibTeX"} as
-shown in Figure \ref{fig:google-scholar-1col} and 
-Figure \ref{fig:google-scholar-2col}.
+%add related work%
 
 
-Table \ref{tab:some-table} shows an example for formatting a table.
 
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|c|}
-\hline
-Method & Accuracy \\
-\hline\hline
-Method 1 & $70 \pm 3$ \% \\
- Method 2 & $76 \pm 3$ \% \\
-\hline
-\end{tabular}
-\end{center}
-\label{tab:some-table}
-\caption{This is an example of a table.}
-\end{table}
 
 
 \section{Proposed Method}
 
 The data we have in hand is in the general form of typical image data, with 784 dimensions, each representing a pixel of the image. When firstly look at out data, we find the data has a bunch of uninformative features, i.e. the dataset have a lot of features with value zero for all images. Therefore, we decided to apply dimensionality reduction methods to get rid of such unuseful features and to improve computational efficiency. 
 
-We start building the classifier with kNN, which is a lazy algorithm that does not learn from the data but simply memorize. We then fit the data into penalized multinomial logistic regression with cross-validation. Then we use Support Vector Machine and Convolutional Neural Network to classify the doodles. We define the accuracy score by the proportion of the number of doodles correctly classified.
+We start building the classifier with kNN, which is a lazy algorithm that does not learn from the data but simply memorize. We then fit the data into penalized multinomial logistic regression with cross-validation. Then we use Support Vector Machine as well as Convolutional Neural Network as somehow more 'advanced' tools to classify the doodles. We define the accuracy score by the proportion of the number of doodles correctly classified.
 
 $$ACC = \frac{\# Correctly Classified}{\# Doodles}$$
 
@@ -158,17 +139,20 @@ The original data set we have consists of 345 Numpy Bitmap files from Google, ea
 
 \paragraph{PCA}
 Since image is centered, we find that there are a lot of features that are all zeroes for all images, thus making them unimformative in model prediction. Therefore, we decide to use Principal Component Analysis to get rid of uninformative features and reduce dimensions. We firstly graphed the explained variance of the feature %加pca那个图%,
-we find that 256 features already explain 100\% of the variance in the data, and that there does not seem to be a much difference between 100, 200, and 256. Thus we apply cross-validation to find the optiomal number of components for kNN and Logistic Regression, and 100 components are suggested for both methods. 
+we find that 256 features already explain 100\% of the variance in the data, and that there does not seem to be a much difference between 100, 200, and 256. Thus we apply cross-validation to find the optiomal number of components for kNN and n_component = 100 is suggested. We fit the PCA on training set, and transform training and test sets to be of 100 dimensions.
 
 \paragraph{Autoencoder}
 
-%parameter settings, details, graph前后对比, num_hidden = 100 because pca = 100 to make consistent. %
+%parameter settings(epoch, rate 之类的), details, graph前后对比, num_hidden = 100 because pca = 100 to make consistent. %
 
 \subsection{k-Nearest Neighbors}
 
-To obtain the optimal choice of k and n_components, we use the GridSearchCV function with 5-fold cross validation. We make a pipeline to determine the combination. For PCA the number of components to be chosen from are [100, 200, 256], and for k the range is [5,100] with step = 5. Since our data set is too large and GridSearchCV failed to return the result even after one and a half days, we decided to run it on a smaller subset with 200 images for each category. This greatly enhanced the computational time. We also fit the kNN model on the original dataset with 784 dimensions to compare the results.
+To obtain the optimal choice of k and n_components, we use the GridSearchCV function with 5-fold cross validation. We make a pipeline to determine the combination. For PCA the number of components to be chosen from are [100, 200, 256], and for k the range is [5,100] with step = 5. Since our data set is too large and GridSearchCV failed to return the result even after one and a half days, we decided to run it on a smaller subset with 200 images for each category. This greatly enhanced the computational time. We then use Autoencoder to compress the data into smaller dimensions and fit the kNN model with optimal k obtained previously, and compare the results. We abort training kNN with full dimensions after the computation takes more than one day.
 
 \subsection{Multinomial Logistic Regression}
+
+Because we have so many features in our data, we use L1 penalization for the logistic regression to not overfit to the data. We adopt the 5-fold cross validation to determine the optimal strength of penalty (\lambda). %可以在详细介绍一下这个penalty，不用说具体得到的parameter。 得出来的parameter可以放到results里， 这里就重点讲一下怎么去得到%。
+We fit the model with three different training sets： one with dimensions reduced by PCA, one with dimensions reduced by Autoencoder, and one with full 784 dimensions to compare model performance. As suggested in Sci-Kit Learn's documentation, we choose SAGA as our solver. We also change the tolerance level to 0.05 because the default tolerance makes it extremely slow for the model to converge.
 
 \subsection{Support Vector Machine}
 
@@ -178,8 +162,55 @@ To obtain the optimal choice of k and n_components, we use the GridSearchCV func
 
 \section{Results and Discussion}
 
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+Model & Accuracy \\
+\hline\hline
+kNN_PCA100 &  33.19 \% \\
+kNN_Autoencoder &  26.13 \% \\
+Logistic_PCA100 & 24.67 \% \\
+Logistic_Autoencoder & 23.72 \% \\
+Logistic_784 & 23.96 \% \\
+Random_Forest & fill \% \\
+SVM & 27.26 \% \\
+CNN_LeNet5 & 47.25 \% \\
+CNN_ResNet34 & 59.96 \% \\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:accuracy}
+\caption{Test Set Accuracy for Different Models}
+\end{table}
+
+For kNN, the optimal combination is n_components = 100 and k = 15. Therefore when using autoencoder, we also compress the data into 100 dimensions. For logistic regression, three models actually have different penalty strength. The optimal penalty strength returned by LogisticRegressionCV is 100, 10000, and 1 for PCA-100, Autoencoder-100 and full dimensions, respectively. Table \ref{tab:accuracy} shows the test set accuracy we obtain from each model.
+
+\subsection{k-Nearest Neighbors}
+
+By adopting GrivSearchCV on a subset of the training data, the optimal number of neighbors to be considered is 15, and the best number of components is 100. By reducing the data into 100 dimensions using PCA and Autoencoder, prediction accuracy on test set is 33.19 \% and 26.13\% respectively. Because we have too many data with large dimensions, kNN takes several hours to be trained. The discrepancy of the test set accuracy is quite large for different dimensionality reduction methods.
+
+\subsection{Multinomial Logistic Regression}
+
+By training the logistic regression with their optimal L1 penalty strength obtained from cross-validation, the test accuracy is 24.62\%, 23.72\%, 23.96\% for PCA-100, Autoencoder-100, and full dimensions. The test set accuracy is not quite different for these three models, but it takes much less time to fit the regression with reduced dimensions.
 
 
+\subsection{Random Forest}
+
+\subsection{Support Vector Machine}
+
+\subsection{Convolutional Neural Network}
+
+\subsection{Discussion}
+
+As expected, CNN returns the best test set accuracy for doodle classification, while logistic regression does not perform so well. %加一些解释%
+By looking at the discrepancy between training accuracy and test set accuracy, we see that for each model overfitting occurs.
+%第二段可以写limitations%
+%limitations： auto encoder different compression may be better （或者different hyperparameters， 因为调参太慢了） / gridsearchcv knn的时候jump的太多了（一次五步）， 可以试试小一点的jump%
+%Logistic Regression 没有cv pca， 所以可能别的pca value更合适%
+%因为category太多， data看起来不够多, 如果更多data应该会提高%
+%现在的0-1 loss function太严厉了， 可以给missclassified but similar categories some partial credits%
+%等等%
 
 \section{Conclusions}
 
@@ -188,7 +219,7 @@ describe them here, or you can create a new section for future directions.
 
 \section{Acknowledgements}
 
-%include ae and cnn code source
+%include ae and cnn code source （赛老师的）
 
 List acknowledgements if any. For example, if someone provided you a dataset, or
 you used someone else's resources, this is a good place to acknowledge
@@ -196,7 +227,7 @@ the help or support you received.
 
 \section{Contributions}
 
-Describe the contributions of each team member who worked on this project.
+Each group member contributed evenly to data cleaning, modeling, and writing of this final report.
 
 
 {\small
