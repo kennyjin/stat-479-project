@@ -69,7 +69,7 @@ More than simply classifying doodles, such algorithms could have educational app
 
 In our project, rather than building seperate algorithms for each category or subset of categories, we combined all categories together as our data set. Therefore, since our data set has 345 categories in total, the prediction accuracy is not very high, but is still higher than what we expected. We apply several algorithms such as kNN, Logistic Regression, SVM, and Convolutional Neural Network, and adopt different variations of dimensionality reduction methods.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
    \includegraphics[width=0.8\linewidth]{figures/quickdraw_image.jpg}
 \end{center}
@@ -78,7 +78,7 @@ In our project, rather than building seperate algorithms for each category or su
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
    \includegraphics[width=0.8\linewidth]{figures/teapot.png}
 \end{center}
@@ -107,11 +107,11 @@ We randomly split our data into 80\% training and 20\% testing.
 \subsection{k-Nearest Neighbors}
 
 The first method that comes in mind when doing classification tasks is the k-Nearest Neighbors algorithm. It is a lazy algorithm that simply memorize the data. kNN algorithms takes two parameters: k, the number of neigherbors to be considered, and p, the parameter for the Minkowski distance function. Minkowski distance is defined as
-$$D(\mathbf{X}, \mathbf{Y}) = (\sum_{i = 1}^{n} (\lvert x_i - y_i \rvert)^p)^\frac{1}{p}}$$
+$$D(\mathbf{X}, \mathbf{Y}) = (\sum_{i = 1}^{n} (\lvert x_i - y_i \rvert)^p)^\frac{1}{p}$$
 And this distance corresponds to the Manhattan Distance when p = 1, and Euclidean Distance when p = 2.
  
 When classying a data point, kNN calculates the k nearest neighbors by the Minkowski distance defined by p, get their labels, and then determine the label of the new data through majority (or plurality) voting. To obtain the optimal k, we conduct 5-fold cross validation on the training set. To wit, the training set is split into 5 portions, and the algorithm is fit five times. Each time the kNN use 4 portions as training and the reamining one as validation. The final accuracy is obtained by averaging the performance of the 5 validation sets in each fitting. In addition, since kNN can be susceptible to the curse of dimensionality, we apply two dimensionality reduction methods: Principal Component Analysis and Autoeocoder.  %可以加一个5-foldcv的图%  ， %介绍一下PCA 和 AE%
-The number of optimal components is also obtained through cross-validation. While the num_hidden layer in Autoencoder is the same as PCA n_components. 
+The number of optimal components is also obtained through cross-validation. The number of hidden layers in Autoencoder is the same as PCA's number of components. 
 
 \subsection{Multinomial Logistic Regression}
 
@@ -119,7 +119,7 @@ We then fit the data into multinomial logistic regression with L1 penalty (LASSO
 Multinomial logistic regression returns the probabity of the label equals to k with the following equation
 $$\mathbf{Pr}(Y^{[i]} = k) = \frac{e^{\beta_k \mathbf{X}^{[i]}}}{\sum_{i = 1}^{K} e^{\beta_i} \mathbf{X}^{[i]}}$$
 
-To prevent this model from overfitting the data, we apply L1 penalty to the model, with coefficient \lambda obtained through 5-fold cross validation. We also use the two dimensionality reduction methods as mentioned above to accelerate computational time. 
+To prevent this model from overfitting the data, we apply L1 penalty to the model, with coefficient $\lambda$ obtained through 5-fold cross validation. We also use the two dimensionality reduction methods as mentioned above to accelerate computational time. 
 
 \subsection{Support Vector Machine}
 
@@ -139,7 +139,7 @@ The original data set we have consists of 345 Numpy Bitmap files from Google, ea
 
 \paragraph{PCA}
 Since image is centered, we find that there are a lot of features that are all zeroes for all images, thus making them unimformative in model prediction. Therefore, we decide to use Principal Component Analysis to get rid of uninformative features and reduce dimensions. We firstly graphed the explained variance of the feature %加pca那个图%,
-we find that 256 features already explain 100\% of the variance in the data, and that there does not seem to be a much difference between 100, 200, and 256. Thus we apply cross-validation to find the optiomal number of components for kNN and n_component = 100 is suggested. We fit the PCA on training set, and transform training and test sets to be of 100 dimensions.
+we find that 256 features already explain 100\% of the variance in the data, and that there does not seem to be a much difference between 100, 200, and 256. Thus we apply cross-validation to find the optiomal number of components for kNN and \texttt{n\_component} = 100 is suggested. We fit the PCA on training set, and transform training and test sets to be of 100 dimensions.
 
 \paragraph{Autoencoder}
 
@@ -147,12 +147,13 @@ we find that 256 features already explain 100\% of the variance in the data, and
 
 \subsection{k-Nearest Neighbors}
 
-To obtain the optimal choice of k and n_components, we use the GridSearchCV function with 5-fold cross validation. We make a pipeline to determine the combination. For PCA the number of components to be chosen from are [100, 200, 256], and for k the range is [5,100] with step = 5. Since our data set is too large and GridSearchCV failed to return the result even after one and a half days, we decided to run it on a smaller subset with 200 images for each category. This greatly enhanced the computational time. We then use Autoencoder to compress the data into smaller dimensions and fit the kNN model with optimal k obtained previously, and compare the results. We abort training kNN with full dimensions after the computation takes more than one day.
+To obtain the optimal choice of k and \texttt{n\_components}, we use the GridSearchCV function with 5-fold cross validation. We make a pipeline to determine the combination. For PCA the number of components to be chosen from are [100, 200, 256], and for k the range is [5,100] with step = 5. Since our data set is too large and GridSearchCV failed to return the result even after one and a half days, we decided to run it on a smaller subset with 200 images for each category. This greatly enhanced the computational time. We then use Autoencoder to compress the data into smaller dimensions and fit the kNN model with optimal k obtained previously, and compare the results. We abort training kNN with full dimensions after the computation takes more than one day.
 
 \subsection{Multinomial Logistic Regression}
 
-Because we have so many features in our data, we use L1 penalization for the logistic regression to not overfit to the data. We adopt the 5-fold cross validation to determine the optimal strength of penalty (\lambda). %可以在详细介绍一下这个penalty，不用说具体得到的parameter。 得出来的parameter可以放到results里， 这里就重点讲一下怎么去得到%。
-We fit the model with three different training sets： one with dimensions reduced by PCA, one with dimensions reduced by Autoencoder, and one with full 784 dimensions to compare model performance. As suggested in Sci-Kit Learn's documentation, we choose SAGA as our solver. We also change the tolerance level to 0.05 because the default tolerance makes it extremely slow for the model to converge.
+Because we have so many features in our data, we use L1 penalization for the logistic regression to not overfit to the data. We adopt the 5-fold cross validation to determine the optimal strength of penalty $(\lambda)$. %可以在详细介绍一下这个penalty，不用说具体得到的parameter。 得出来的parameter可以放到results里， 这里就重点讲一下怎么去得到%。
+
+We fit the model with three different training sets: one with dimensions reduced by PCA, one with dimensions reduced by Autoencoder, and one with full 784 dimensions to compare model performance. As suggested in Sci-Kit Learn's documentation, we choose SAGA as our solver. We also change the tolerance level to 0.05 because the default tolerance makes it extremely slow for the model to converge.
 
 \subsection{Support Vector Machine}
 
@@ -168,15 +169,16 @@ We fit the model with three different training sets： one with dimensions reduc
 \hline
 Model & Accuracy \\
 \hline\hline
-kNN_PCA100 &  33.19 \% \\
-kNN_Autoencoder &  26.13 \% \\
-Logistic_PCA100 & 24.67 \% \\
-Logistic_Autoencoder & 23.72 \% \\
-Logistic_784 & 23.96 \% \\
-Random_Forest & fill \% \\
-SVM & 27.26 \% \\
-CNN_LeNet5 & 47.25 \% \\
-CNN_ResNet34 & 59.96 \% \\
+
+\text{kNN\_PCA100} &  33.19 \% \\
+\text{kNN\_Autoencoder} &  26.13 \% \\
+\text{Logistic\_PCA100} & 24.67 \% \\
+\text{Logistic\_Autoencoder} & 23.72 \% \\
+\text{Logistic\_784} & 23.96 \% \\
+\text{Random Forest} & fill \% \\
+\text{SVM} & 27.26 \% \\
+\text{CNN\_LeNet5} & 47.25 \% \\
+\text{CNN\_ResNet34} & 59.96 \% \\
 \hline
 \end{tabular}
 \end{center}
@@ -184,7 +186,7 @@ CNN_ResNet34 & 59.96 \% \\
 \caption{Test Set Accuracy for Different Models}
 \end{table}
 
-For kNN, the optimal combination is n_components = 100 and k = 15. Therefore when using autoencoder, we also compress the data into 100 dimensions. For logistic regression, three models actually have different penalty strength. The optimal penalty strength returned by LogisticRegressionCV is 100, 10000, and 1 for PCA-100, Autoencoder-100 and full dimensions, respectively. Table \ref{tab:accuracy} shows the test set accuracy we obtain from each model.
+For kNN, the optimal combination is \texttt{n\_components} = 100 and k = 15. Therefore when using autoencoder, we also compress the data into 100 dimensions. For logistic regression, three models actually have different penalty strength. The optimal penalty strength returned by LogisticRegressionCV is 100, 10000, and 1 for PCA-100, Autoencoder-100 and full dimensions, respectively. Table \ref{tab:accuracy} shows the test set accuracy we obtain from each model.
 
 \subsection{k-Nearest Neighbors}
 
