@@ -1,7 +1,5 @@
 1. Related work
-2. Proposed Method: convolutional neural network
-3. Experiment: Dimensionality reduction: autoencoder
-4. Experiment: convolutional neural network
-5. Result and discussion: random forest & CNN
-6. Conclusion
-7. Acknowledgement
+2. Proposed Method: random forest
+3. Experiment: random forest & CNN
+4. Result and discussion: random forest & CNN
+5. Conclusion
