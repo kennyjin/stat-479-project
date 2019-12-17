@@ -67,7 +67,7 @@ Quick, Draw!\footnote{https://quickdraw.withgoogle.com/} is an online game relea
 
 More than simply classifying doodles, such algorithms could have educational applications for language-learning toddlers as well. They can draw what they see, and learn how to spell or say it, which could accelerate the language learning process. Moreover, since doodles are somewhat sketchy, by constructing algorithms that can make accurate predictions based on sketchy images, the uses of the algorithms could be extended to convert handwritten text to computer, eliminating the need to type all the words.
 
-In our project, rather than building seperate algorithms for each category or subset of categories, we combined all categories together as our data set. Therefore, since our data set has 345 categories in total, the prediction accuracy is not very high, but is still higher than what we expected. We apply several algorithms such as kNN, Logistic Regression, SVM, and Convolutional Neural Network, and adopt different variations of dimensionality reduction methods.
+In our project, rather than building seperate algorithms for each category or subset of categories, we combined all categories together as our data set. Therefore, since our data set has 345 categories in total, the prediction accuracy is not very high, but is still higher than what we expected. We apply several algorithms such as kNN, Logistic Regression and Convolutional Neural Network, and adopt different variations of dimensionality reduction methods.
 
 \begin{figure}[ht]
 \begin{center}
@@ -106,7 +106,7 @@ We randomly split our data into 80\% training and 20\% testing.
 
 \subsection{k-Nearest Neighbors}
 
-The first method that comes in mind when doing classification tasks is the k-Nearest Neighbors algorithm. It is a lazy algorithm that simply memorize the data. kNN algorithms takes two parameters: k, the number of neigherbors to be considered, and p, the parameter for the Minkowski distance function. Minkowski distance is defined as
+The first method that comes in mind when doing classification tasks is the k-Nearest Neighbors algorithm. It is a lazy algorithm that simply memorize the data. kNN algorithms takes two parameters: k, the number of neighbors to be considered, and p, the parameter for the Minkowski distance function. Minkowski distance is defined as
 $$D(\mathbf{X}, \mathbf{Y}) = (\sum_{i = 1}^{n} (\lvert x_i - y_i \rvert)^p)^\frac{1}{p}$$
 And this distance corresponds to the Manhattan Distance when p = 1, and Euclidean Distance when p = 2.
  
@@ -121,7 +121,7 @@ $$\mathbf{Pr}(Y^{[i]} = k) = \frac{e^{\beta_k \mathbf{X}^{[i]}}}{\sum_{i = 1}^{K
 
 To prevent this model from overfitting the data, we apply L1 penalty to the model, with coefficient $\lambda$ obtained through 5-fold cross validation. We also use the two dimensionality reduction methods as mentioned above to accelerate computational time. 
 
-\subsection{Support Vector Machine}
+\subsection{Random Forest}
 
 \subsection{Convolutional Neural Network}
 
@@ -142,6 +142,7 @@ Since image is centered, we find that there are a lot of features that are all z
 we find that 256 features already explain 100\% of the variance in the data, and that there does not seem to be a much difference between 100, 200, and 256. Thus we apply cross-validation to find the optiomal number of components for kNN and \texttt{n\_component} = 100 is suggested. We fit the PCA on training set, and transform training and test sets to be of 100 dimensions.
 
 \paragraph{Autoencoder}
+We also applied another method of dimensionality reduction called autoencoder. Since PCA is only an linear method, we are concerned that it may not preserve the information in the images very well. On the contrary, the method of autoencoder might perform better than PCA regarding the task of dimensionality reduction. The autoencoder we used for this project is a 3-layer neural network, with one input layer, one hidden layer and one output layer. The input layer takes in the original image vector with 784 dimensions, and the output layer reconstructs the image back to 784 dimensions. We set the number of nodes in the hidden layer to be 100 to make it consistent with PCA. We set the learning rate as 0.05, the random seed as 123 and the batch size as 1000. After 15 epochs of training, the autoencoder can already reconstruct the images pretty well. Then we rerun the autoencoder on all the examples (1000 images for each category) and extracted the hidden layer vectors (100 dimensions) as a new dataset whose dimension was reduced.
 
 %parameter settings(epoch, rate 之类的), details, graph前后对比, num_hidden = 100 because pca = 100 to make consistent. %
 
@@ -155,7 +156,7 @@ Because we have so many features in our data, we use L1 penalization for the log
 
 We fit the model with three different training sets: one with dimensions reduced by PCA, one with dimensions reduced by Autoencoder, and one with full 784 dimensions to compare model performance. As suggested in Sci-Kit Learn's documentation, we choose SAGA as our solver. We also change the tolerance level to 0.05 because the default tolerance makes it extremely slow for the model to converge.
 
-\subsection{Support Vector Machine}
+\subsection{Random Forest}
 
 \subsection{Convolutional Neural Network}
 
@@ -199,7 +200,6 @@ By training the logistic regression with their optimal L1 penalty strength obtai
 
 \subsection{Random Forest}
 
-\subsection{Support Vector Machine}
 
 \subsection{Convolutional Neural Network}
 
