@@ -58,11 +58,11 @@ Image recognition, especially from scratchy and noisy data, plays a significant 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
 
-Quick, Draw!\footnote{https://quickdraw.withgoogle.com/} is an online game released by Google on November, 2016 where the user is prompted with a specific requirement to draw a picture in 20 seconds and the algorithm will make a prediction based on the drawing. Millions of images were collected by Google through this game, and they were utilized to make better and quicker predictions. Figure \ref{fig:quickdraw} showed an example of such images\footnote{https://github.com/googlecreativelab/quickdraw-dataset}. Such large-scale data set leaves many to the imagination of machine learning enthusiasts and encourages the rises of creative projects. For example, Quartz has explored the drawing habits like stroke order grouped by different countries and found clear associations between the drawing and their language styles \cite{quartzcircle}; others tried several different prediction models evaluated by prediction accuracy \cite{github}.
+Quick, Draw!\footnote{https://quickdraw.withgoogle.com/} is an online game released by Google on November, 2016 where the user is prompted with a specific requirement to draw a picture in 20 seconds and the algorithm will make a prediction based on the drawing. Millions of images were collected by Google through this game, and they were utilized to make better and quicker predictions. Figure \ref{fig:quickdraw} showed an example of such images\footnote{https://github.com/googlecreativelab/quickdraw-dataset}. Such large-scale dataset leaves many imaginations to machine learning enthusiasts and encourages the rises of creative projects. For example, Quartz has explored the drawing habits like stroke order grouped by different countries and found clear associations between the drawing and their language styles \cite{quartzcircle}; others tried several different prediction models evaluated by prediction accuracy \cite{github}.
 
 More than simply classifying doodles, such algorithms could have educational applications for language-learning toddlers as well. They can draw what they see, and learn how to spell or say it, which could accelerate the language learning process. Moreover, since doodles are somewhat sketchy, by constructing algorithms that can make accurate predictions based on sketchy images, the uses of the algorithms could be extended to convert handwritten text to computer, eliminating the need to type all the words.
 
-In our project, rather than building separate algorithms for each category or subset of categories, we combined all categories together as our data set. Therefore, since our data set has 345 categories in total, the prediction accuracy is not very high, but is still higher than what we expected. We apply several algorithms such as KNN, Logistic Regression and CNN, and adopt different variations of dimension reduction methods.
+In our project, rather than building separate algorithms for each category or subset of categories, we combined all categories together as our data set. Therefore, since our data set has totally 345 categories, the prediction accuracy is not very high, but is still higher than what we expected. We apply several algorithms such as KNN, Logistic Regression, Random Forest, as well as CNN, and adopt different variations of dimension reduction methods.
 
 \begin{figure}[ht]
 \begin{center}
@@ -83,14 +83,11 @@ In our project, rather than building separate algorithms for each category or su
 
 \section{Related Work}
 
-Quick, Draw! dataset is popular among machine learning enthusiasts once it has been released. Similar to our tasks, many experts of machine learning compared different classification algorithms to recognize doodles. Harun-Ur-Rashid experimented on the dataset in the Kaggle competition [1]. He applied six machine learning algorithms: KNN, Random Forest,  Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Harun-Ur-Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doogles into 345 categories which are all categories of the original dataset and to check whether algorithms can remain consistently high accuracies. 
+Quick, Draw! dataset becomes popular among machine learning enthusiasts as soon as it has been released to the public. Similar to our tasks, many experts of machine learning have exploited different classification algorithms to recognize doodles. Harun-Ur-Rashid applied six machine learning algorithms on the dataset in a Kaggle competition: KNN, Random Forest, Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN [1]. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Harun-Ur-Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doodles into 345 categories which are all categories of the original dataset and to check whether algorithms can consistently remain high accuracies. 
 
-Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories [2]. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best for the computer vision prombles; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their parameters. 
+Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories [2]. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best on the computer vision problem; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their hyperparameters. 
 
-Besides, there are some creative explorations on the dataset. For example, Ha and Sonnad used the public database from Quick, Draw! to find relations between the styles of drawing basic shapes and major language groups.They found that the drawing stroke orders were highly influenced by the languages and cultures. Inspired by their amazing conclusions, we try to use another machine learning algorithm mini-batch K-means Clustering to explore the similarities of drawing styles among all 345 distinct categories of distinct doodles. 
-
-
-
+Besides, there are some creative explorations on the dataset. For example, Ha and Sonnad used the public database from Quick, Draw! to find relations between the styles of drawing basic shapes and major language groups.They found that the drawing stroke orders were highly influenced by the languages and cultures. Inspired by their amazing conclusions, we try the mini-batch K-means Clustering algorithm to explore the similarities of drawing styles among all 345 distinct categories of distinct doodles. 
 
 
 \section{Proposed Method}
@@ -132,7 +129,7 @@ of the algorithms may be included here.
 
 \subsection{Dataset}
 
-The original data set we have consists of 345 Numpy Bitmap files from Google, each .npy consists of thousands of gray scale images for each category. Google has already preprocessed the data in .npy files by only keeping image data and centering the image with 28 * 28 pixels. Because it is not practical to run the whole data set on our computer, we decide to take a random sample of 1000 images from each category, and combined them to one single .npy file, which has 345,000 images in total. In fitting the models, we split our data set as 80\% for training and 20\% for testing using $train_test_split$ in Sci-Kit Learn stratified on labels. Each image is represented as having 784 dimensions, with values representing the intensity of each pixel, ranging from 0 - 255. We apply max-min normalization to the image data, and the range thus becomes 0 - 1. In addition, the label is represented as 0 - 344 for each category, rather than the exact text label. Global random seed is set at 123.
+The original data set we have consists of 345 Numpy Bitmap files from Google, each .npy file consists of thousands of gray scale images for each category. Google has already pre-processed the data in .npy files by only keeping image data and centering the image with 28 * 28 pixels. Because it is not practical to run the whole data set on our computer, we decide to take a random sample of 1000 images from each category, and combined them to one single .npy file, which has 345,000 images in total. In fitting the models, we split our data set as 80\% for training and 20\% for testing using $train_test_split$ in Sci-Kit Learn stratified on labels. Each image is represented as having 784 dimensions, with values representing the intensity of each pixel, ranging from 0 - 255. We apply max-min normalization to the image data, and the range thus becomes 0 - 1. In addition, the label is represented as 0 - 344 for each category, rather than the exact text label. Global random seed is set at 123.
 
 \subsection{Dimensionality Reduction}
 
@@ -142,7 +139,14 @@ we find that 256 features already explain 100\% of the variance in the data, and
 
 \paragraph{Autoencoder}
 We also applied another method of dimensionality reduction called autoencoder. Since PCA is only an linear method, we are concerned that it may not preserve the information in the images very well. On the contrary, the method of autoencoder might perform better than PCA regarding the task of dimensionality reduction. The autoencoder we used for this project is a 3-layer neural network, with one input layer, one hidden layer and one output layer. The input layer takes in the original image vector with 784 dimensions, and the output layer reconstructs the image back to 784 dimensions. We set the number of nodes in the hidden layer to be 100 to make it consistent with PCA. We set the learning rate as 0.05, the random seed as 123 and the batch size as 1000. After 15 epochs of training, the autoencoder can already reconstruct the images pretty well. Then we rerun the autoencoder on all the examples (1000 images for each category) and extracted the hidden layer vectors (100 dimensions) as a new dataset whose dimension was reduced.
-%Add original images and images reconstructed from autoencoder%
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/examples_after_autoencoder.jpg}
+\end{center}
+   \caption{Original Image VS Image reconstructed from Autoencoder }
+\label{fig:examples_after_autoencoder}
+\end{figure}
 
 %parameter settings(epoch, rate 之类的), details, graph前后对比, num_hidden = 100 because pca = 100 to make consistent. %
 
@@ -203,6 +207,18 @@ By training the logistic regression with their optimal L1 penalty strength obtai
 
 \subsection{Convolutional Neural Network}
 
+
+\subsection{Mini batch K-Means Clustering}
+We choose K-means Clustering group pictures of their characteristics considering expensive computational cost of K-means Clustering. Then we use the Elbow method select the optimal hyperparameter K. From Figure \ref{fig:K_means_clustering}, 50 clusters are a reasonable choice since the distortion is dramatically decreasing after 50 clusters. 
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/K_means_clustering.jpg}
+\end{center}
+   \caption{Distortions with each number of clusters }
+\label{fig:K_means_clustering}
+\end{figure}
+
 \subsection{Discussion}
 
 As expected, CNN returns the best test set accuracy for doodle classification, while logistic regression does not perform so well. %加一些解释%
@@ -214,102 +230,15 @@ By looking at the discrepancy between training accuracy and test set accuracy, w
 %现在的0-1 loss function太严厉了， 可以给missclassified but similar categories some partial credits%
 %等等%
 
-\section{Explore drawing styles using mini batch K-Means Clustering}
-\subsection{Methodology}
-We choose K-means Clustering group pictures of their characteristics considering expensive computational cost of K-means Clustering. Then we use the Elbow method select the optimal hyperparameter K. From Figure 3, we choose 50 clusters since the distortion is dramatically decreasing after 50 clusters. 
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/K_means_clustering.jpg}
-\end{center}
-   \caption{Distortions with each number of clusters }
-\label{fig:quickdraw}
-\end{figure}
-
-\subsection{Discussion}
-We found that the top 10 categories of drawing with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simpler shapes so that people tend to agree with each other on how to 
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/top_category.jpg}
-\end{center}
-   \caption{Top 10 categories among all clusters}
-\label{fig:quickdraw}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/1.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/2.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/3.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/3.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/4.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/5.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/6.jpg}
-\end{center}
-   \caption{Examples of }
-\label{fig:quickdraw}
-\end{figure}
-
-
-
+We listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. People tend to simplify complexity. For example, people use to describe animal migration, which is 
 
 
 \section{Conclusions}
-
-
 
 Describe your conclusions here. If there are any future directions, you can
 describe them here, or you can create a new section for future directions.
 
 \section{Acknowledgements}
-
 %include ae and cnn code source （赛老师的）
 We would like to express our thanks to Prof. Raschka for kindly providing us with suggestions about this project and code examples for the implementations of CNNs.
 
@@ -325,6 +254,74 @@ Each group member contributed evenly to data cleaning, modeling, and writing of 
 [3]: Sonnad, N. (2017, June 15). How do you draw a circle? We analyzed 100,000 circles to show how culture shapes our instincts. Retrieved from https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/.
 
 
+
+\section{Appendix}
+
+
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/top_category.jpg}
+\end{center}
+   \caption{Top 10 categories with most similar drawing styles among all clusters}
+\label{fig:top_category}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/1.jpg}
+\end{center}
+   \caption{Examples of doodles in the top categories }
+\label{fig:1}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/2.jpg}
+\end{center}
+   \caption{An examples of drawings with abstract category }
+\label{fig:2}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/3.jpg}
+\end{center}
+   \caption{"Bus," "School Bus," and "Van" are in the same group}
+\label{fig:3}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/4.jpg}
+\end{center}
+   \caption{"Skull" and "Mushroom" are regarded as a same group}
+\label{fig:4}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/5.jpg}
+\end{center}
+   \caption{"The Mona Lisa" and "Calendar" are in a same cluster}
+\label{fig:5}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/6.jpg}
+\end{center}
+   \caption{"Vase" and "Sock" are in a same cluster}
+\label{fig:6}
+\end{figure}
+
+
+
+s
 {\small
 \bibliographystyle{ieee}
 \bibliography{bibliography}
