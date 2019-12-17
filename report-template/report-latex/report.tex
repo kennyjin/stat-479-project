@@ -100,7 +100,7 @@ The data we have in hand is in the general form of typical image data, with 784 
 
 We start building the classifier with kNN, which is a lazy algorithm that does not learn from the data but simply memorize. We then fit the data into penalized multinomial logistic regression with cross-validation. Then we use Support Vector Machine as well as Convolutional Neural Network as somehow more 'advanced' tools to classify the doodles. We define the accuracy score by the proportion of the number of doodles correctly classified.
 
-$$ACC = \frac{\# Correctly Classified}{\# Doodles}$$
+$$ACC = \frac{\text{Number of Correctly Classified}}{\text{Total number of Doodles}}$$
 
 We randomly split our data into 80\% training and 20\% testing.
 
@@ -143,6 +143,7 @@ we find that 256 features already explain 100\% of the variance in the data, and
 
 \paragraph{Autoencoder}
 We also applied another method of dimensionality reduction called autoencoder. Since PCA is only an linear method, we are concerned that it may not preserve the information in the images very well. On the contrary, the method of autoencoder might perform better than PCA regarding the task of dimensionality reduction. The autoencoder we used for this project is a 3-layer neural network, with one input layer, one hidden layer and one output layer. The input layer takes in the original image vector with 784 dimensions, and the output layer reconstructs the image back to 784 dimensions. We set the number of nodes in the hidden layer to be 100 to make it consistent with PCA. We set the learning rate as 0.05, the random seed as 123 and the batch size as 1000. After 15 epochs of training, the autoencoder can already reconstruct the images pretty well. Then we rerun the autoencoder on all the examples (1000 images for each category) and extracted the hidden layer vectors (100 dimensions) as a new dataset whose dimension was reduced.
+%Add original images and images reconstructed from autoencoder%
 
 %parameter settings(epoch, rate 之类的), details, graph前后对比, num_hidden = 100 because pca = 100 to make consistent. %
 
@@ -159,6 +160,7 @@ We fit the model with three different training sets: one with dimensions reduced
 \subsection{Random Forest}
 
 \subsection{Convolutional Neural Network}
+
 
 
 
@@ -222,10 +224,7 @@ describe them here, or you can create a new section for future directions.
 \section{Acknowledgements}
 
 %include ae and cnn code source （赛老师的）
-
-List acknowledgements if any. For example, if someone provided you a dataset, or
-you used someone else's resources, this is a good place to acknowledge
-the help or support you received.
+We would like to express our thanks to Prof. Raschka for kindly providing us with suggestions about this project and code examples for the implementations of CNNs.
 
 \section{Contributions}
 
