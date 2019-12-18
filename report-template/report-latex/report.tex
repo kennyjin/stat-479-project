@@ -30,13 +30,12 @@
 %%%%%%%%% TITLE
 \title{What are you drawing? Classifying Google Quick, Draw! Doodles}
 
-%我忘记加上了random forest， 你们酌情在需要的地方加一下%
 
 \author{Tong Li\\
 {\tt\small tli287@wisc.edu}
 \and
 Runxin Gao\\
-{\tt\small rgao35r@wisc.edu}
+{\tt\small rgao35@wisc.edu}
 \and
 Kenny Jin\\
 {\tt\small jjin59@wisc.edu}
@@ -83,9 +82,9 @@ In our project, rather than building separate algorithms for each category or su
 
 \section{Related Work}
 
-Quick, Draw! dataset becomes popular among machine learning enthusiasts as soon as it has been released to the public. Similar to our tasks, many experts of machine learning have exploited different classification algorithms to recognize doodles. Harun-Ur-Rashid applied six machine learning algorithms on the dataset in a Kaggle competition: KNN, Random Forest, Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN [1]. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Harun-Ur-Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doodles into 345 categories which are all categories of the original dataset and to check whether algorithms can consistently remain high accuracies. 
+Quick, Draw! dataset becomes popular among machine learning enthusiasts as soon as it has been released to the public. Similar to our tasks, many experts of machine learning have exploited different classification algorithms to recognize doodles. Harun-Ur-Rashid applied six machine learning algorithms on the dataset in a Kaggle competition: KNN, Random Forest, Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN\cite{kaggle}. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Harun-Ur-Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doodles into 345 categories which are all categories of the original dataset and to check whether algorithms can consistently remain high accuracies. 
 
-Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories [2]. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best on the computer vision problem; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their hyperparameters. 
+Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories\cite{stanford}. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best on the computer vision problem; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their hyperparameters. 
 
 Besides, there are some creative explorations on the dataset. For example, Ha and Sonnad used the public database from Quick, Draw! to find relations between the styles of drawing basic shapes and major language groups.They found that the drawing stroke orders were highly influenced by the languages and cultures. Inspired by their amazing conclusions, we try the mini-batch K-means Clustering algorithm to explore the similarities of drawing styles among all 345 distinct categories of distinct doodles. 
 
@@ -165,6 +164,8 @@ Because we have so many features in our data, we use L1 penalization for the log
 We fit the model with three different training sets: one with dimensions reduced by PCA, one with dimensions reduced by Autoencoder, and one with full 784 dimensions to compare model performance. As suggested in Sci-Kit Learn's documentation, we choose SAGA as our solver. We also change the tolerance level to 0.05 because the default tolerance makes it extremely slow for the model to converge.
 
 \subsection{Random Forest}
+To make a selection regarding the best parameters for random forest, GridSearchCV function could be used. However, When we tried to use this method for hyperparameter selection, the memory error keeps emerging. Thus, we have to use 3-way holdout method to try out different hyperparameters and check the performance of the model on the validation set. After this procedure, we decided to use 500 estimators and sex the max\_depth of each decision tree to be 16. Then we fit the random forest model with the hyperparameters above using the original dataset, PCA-transformed dataset and autoencoder-transformed dataset, respectively. When fitting the final models, we merge the training and validation set back to a complete training set and use it for model training.
+
 
 
 \subsection{Convolutional Neural Network}
@@ -188,9 +189,11 @@ Model & Accuracy \\
 \text{Logistic\_PCA100} & 24.67 \% \\
 \text{Logistic\_Autoencoder} & 23.72 \% \\
 \text{Logistic\_784} & 23.96 \% \\
-\text{Random Forest} & fill \% \\
-\text{CNN\_LeNet5} & 47.25 \% \\
-\text{CNN\_ResNet34} & 59.96 \% \\
+\text{Random Forest\_PCA100} & 30.87 \% \\
+\text{Random Forest\_Autoencoder} & 28.33 \% \\
+\text{Random Forest\_784} & 31.25 \% \\
+\text{CNN\_LeNet5} & 46.58 \% \\
+\text{CNN\_ResNet34} & 59.87 \% \\
 \hline
 \end{tabular}
 \end{center}
@@ -211,6 +214,23 @@ By training the logistic regression with their optimal L1 penalty strength obtai
 
 \subsection{Random Forest}
 
+After training on the original dataset whose dimensionality is not reduced, the random forest model gives a test set prediction accuracy of 31.25\%. Using PCA-transformed dataset for training, the prediction accuracy becomes 30.87\%, which is slightly lower than that of the original dataset. Training with the autoencoder-transformed dataset produces the lowest testing set accuracy among all 3 results, which is 28.33\%. It seems that it is unnecessary to perform dimensionality reduction before feeding the data into this random forest model. 
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/LeNet5.pdf}
+\end{center}
+   \caption{LeNet-5 cost function plot for different learning rates}
+\label{fig:lenet-5_cost}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/ResNet-34.pdf}
+\end{center}
+   \caption{ResNet-34 cost function plot for different learning rates}
+\label{fig:resnet-34_cost}
+\end{figure}
 
 \subsection{Convolutional Neural Network}
 After the training of each neural network, we observed that for LeNet-5, the model will converge under all of the 3 learning rates (0.0001, 0.0005 and 0.001). However, when learning rate is 0.0005, the test set prediction accuracy is 46.58\%, the highest of all these 3 learning rates. For ResNet-34, the model seems to be converging under both learning rates (0.001, 0.005), although the learning rate 0.001 will give a better test set prediction accuracy of 59.87\%. The training of ResNet-34 (10 epochs) clearly takes more time than that of LeNet-5 (50 epochs). 
@@ -230,8 +250,8 @@ We choose K-means Clustering group pictures of their characteristics considering
 
 \subsection{Discussion}
 
-As expected, CNN returns the best test set accuracy for doodle classification, while logistic regression does not perform so well. %加一些解释%
-By looking at the discrepancy between training accuracy and test set accuracy, we see that for each model overfitting occurs.
+As expected, CNN returns the best test set accuracy for doodle classification, while logistic regression does not perform so well. From this experiment, we can see that deep learning models are indeed powerful for the task of image recognition. For other models, since features of images cannot be properly processed, the prediction performance is much lower.
+By looking at the discrepancy between training accuracy and test set accuracy, we see that for some model overfitting occurs.
 %第二段可以写limitations%
 %limitations： auto encoder different compression may be better （或者different hyperparameters， 因为调参太慢了） / gridsearchcv knn的时候jump的太多了（一次五步）， 可以试试小一点的jump%
 %Logistic Regression 没有cv pca， 所以可能别的pca value更合适%
@@ -239,13 +259,15 @@ By looking at the discrepancy between training accuracy and test set accuracy, w
 %现在的0-1 loss function太严厉了， 可以给missclassified but similar categories some partial credits%
 %等等%
 
-We listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. People tend to simplify complexity. For example, people use to describe animal migration, which is 
+For the exploratory data analysis part,we listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. %People tend to simplify complexity. For example, people use to describe animal migration, which is% 
 
+There are some limitations of this study. Due to the time constraint, we are not able to include more data for this project. If more data were used, the results could be more reliable. Besides, we did not perform enough hyperparameter tunings for each model, thus the performance of each model might not be optimal. In the original dataset, additional time-stamp data are provided. This dataset contains people's order of drawing each stroke, thus might be useful for improving prediction performance. However, we did not include this part in our project due to the time constraints.
 
 \section{Conclusions}
 
-Describe your conclusions here. If there are any future directions, you can
-describe them here, or you can create a new section for future directions.
+We can conclude that for the task of doodle classification, the CNN models have superior performance, and the ResNet-34 is the best model regarding the prediction accuracy.
+
+For future experiments, we can include more data and perform more hyperparameter tuning in order to improve the prediction performance of each model. We can further include the time-stamp data in the project and try some interesting models, such as recurrent neural networks (RNN), to predict using this part of data.
 
 \section{Acknowledgements}
 %include ae and cnn code source （赛老师的）
@@ -255,85 +277,18 @@ We would like to express our thanks to Prof. Raschka for kindly providing us wit
 
 Each group member contributed evenly to data cleaning, modeling, and writing of this final report.
 
-\section{References}
-[1]: Rashid, H. Retrived from https://www.kaggle.com/harunshimanto/lets-play-with-quick-draw.
 
-[2]: Guo, K., WoMa, J., Xu, \& E. Quick, Draw! Doodle Recognition. Retrieved from http://cs229.stanford.edu/proj2018/report/98.pdf.
-
-[3]: Sonnad, N. (2017, June 15). How do you draw a circle? We analyzed 100,000 circles to show how culture shapes our instincts. Retrieved from https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/.
-
-
-
-\section{Appendix}
-
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/top_category.jpg}
-\end{center}
-   \caption{Top 10 categories with most similar drawing styles among all clusters}
-\label{fig:top_category}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/1.jpg}
-\end{center}
-   \caption{Examples of doodles in the top categories }
-\label{fig:1}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/2.jpg}
-\end{center}
-   \caption{An examples of drawings with abstract category }
-\label{fig:2}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/3.jpg}
-\end{center}
-   \caption{"Bus," "School Bus," and "Van" are in the same group}
-\label{fig:3}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/4.jpg}
-\end{center}
-   \caption{"Skull" and "Mushroom" are regarded as a same group}
-\label{fig:4}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/5.jpg}
-\end{center}
-   \caption{"The Mona Lisa" and "Calendar" are in a same cluster}
-\label{fig:5}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/6.jpg}
-\end{center}
-   \caption{"Vase" and "Sock" are in a same cluster}
-\label{fig:6}
-\end{figure}
-
-
-
-s
 {\small
 \bibliographystyle{ieee}
 \bibliography{bibliography}
 }
 
 \end{document}
+
+\section{Appendix}
+
+
+
+
+
+
