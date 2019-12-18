@@ -121,8 +121,9 @@ To prevent this model from overfitting the data, we apply L1 penalty to the mode
 
 \subsection{Convolutional Neural Network}
 
-Describe the method(s) you are proposing, developing, or using. I.e., details
-of the algorithms may be included here. 
+Different than all the traditional machine learning models described above, the Convolutional Neural Network (CNN) is a class of deep neural networks that are especially powerful in the field of image recognition. There are various structures of CNNs, but they will always have convolutional layers and pooling layers in addtion to fully connected layers. The special structure of CNNs might be able to capture hidden features of images, thus making them perform better than many other machine learning models when doing image classification. 
+
+There are many different types of CNNs, and we selected specifically 2 of them. One is called LeNet-5\cite{lenet}, which is a classical CNN model that has a relatively simple structure, and another is called ResNet-34\cite{resnet}, which is a newer model whose structure is much more complicated. Commonly regarded as the pioneer of CNNs\footnote{https://github.com/rasbt/deeplearning-models/blob/master/pytorch\_ipynb/cnn/cnn-lenet5-quickdraw.ipynb}, LeNet-5 contains 7 layers, 3 of which are convolutional layers. ResNet-34, however, is a much larger neural net that contains 34 parameter layers\footnote{https://github.com/rasbt/deeplearning-models/blob/master/pytorch\_ipynb/cnn/cnn-resnet34-quickdraw.ipynb}, and its architecture is very different than LeNet-5. Both models can be used for image classification, thus we selected these 2 models for our project and wanted to compare their performance with other traditional models.
 
 \section{Experiments}
 
@@ -249,7 +250,7 @@ Each group member contributed evenly to data cleaning, modeling, and writing of 
 \section{References}
 [1]: Rashid, H. Retrived from https://www.kaggle.com/harunshimanto/lets-play-with-quick-draw.
 
-[2]：Guo, K., WoMa, J., Xu, & E. Quick, Draw! Doodle Recognition. Retrieved from http://cs229.stanford.edu/proj2018/report/98.pdf.
+[2]: Guo, K., WoMa, J., Xu, \& E. Quick, Draw! Doodle Recognition. Retrieved from http://cs229.stanford.edu/proj2018/report/98.pdf.
 
 [3]: Sonnad, N. (2017, June 15). How do you draw a circle? We analyzed 100,000 circles to show how culture shapes our instincts. Retrieved from https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/.
 
