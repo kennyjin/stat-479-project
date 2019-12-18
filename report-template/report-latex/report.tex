@@ -118,6 +118,9 @@ $$\mathbf{Pr}(Y^{[i]} = k) = \frac{e^{\beta_k \mathbf{X}^{[i]}}}{\sum_{i = 1}^{K
 To prevent this model from overfitting the data, we apply L1 penalty to the model, with coefficient $\lambda$ obtained through 5-fold cross validation. We also use the two dimensionality reduction methods as mentioned above to accelerate computational time. 
 
 \subsection{Random Forest}
+Random forest is an ensemble learning method that combines multiple decision trees to make the final prediction. Comparing to using a single decision tree, the method of random forest is usually more robust to overfitting, thus this model will perform better than decision tree on the test set. Therefore, we decided that this model will also be included in our experiment.
+
+Random Forest models can be useful for feature selection, thus when using random forest for prediction, it might be unnecessary to adopt dimensionality reduction techniques before feeding the data into the model. However, we still wanted to compare the prediction performance of random forest between differently manipulated datasets. Thus, we will still use the 2 dimensionality reduction techniques (PCA, Autoencoder) and compare the prediction result with that of the original dataset.
 
 \subsection{Convolutional Neural Network}
 
@@ -163,8 +166,11 @@ We fit the model with three different training sets: one with dimensions reduced
 
 \subsection{Random Forest}
 
-\subsection{Convolutional Neural Network}
 
+\subsection{Convolutional Neural Network}
+We selected LeNet-5 and ResNet-34 for the prediction task. The implementation of these 2 models is adapted from Professor Raschka's code\footnote{https://github.com/rasbt/deeplearning-models} for deep learning models. For both LeNet-5 and ResNet-34, we set the batch size equal to 128. The number of epochs for training are set differently for these 2 CNNs. We set NUM\_EPOCHS = 50 for LeNet-5, but set it to 10 for ResNet-34, since the structure of ResNet-34 is more complicated and it needs more training time for each epoch. We also set the RANDOM\_SEED = 123 for the training of each CNN.
+
+For deep neural networks, the learning rate settings are important. The cost function of a CNN could fail to converge under an improper setting of learning rate. To make sure each model converges, we tried different learning rates for each model. For LeNet-5, we set the learning rates to be 0.0001, 0.0005 and 0.001. For ResNet-34, we set the learning rates to be 0.001, 0.005. By checking the plots of the cost vs number of epochs, we are able to see if the training of CNN converges.
 
 
 
@@ -207,7 +213,9 @@ By training the logistic regression with their optimal L1 penalty strength obtai
 
 
 \subsection{Convolutional Neural Network}
+After the training of each neural network, we observed that for LeNet-5, the model will converge under all of the 3 learning rates (0.0001, 0.0005 and 0.001). However, when learning rate is 0.0005, the test set prediction accuracy is 46.58\%, the highest of all these 3 learning rates. For ResNet-34, the model seems to be converging under both learning rates (0.001, 0.005), although the learning rate 0.001 will give a better test set prediction accuracy of 59.87\%. The training of ResNet-34 (10 epochs) clearly takes more time than that of LeNet-5 (50 epochs). 
 
+%To add figures of cost function%
 
 \subsection{Mini batch K-Means Clustering}
 We choose K-means Clustering group pictures of their characteristics considering expensive computational cost of K-means Clustering. Then we use the Elbow method select the optimal hyperparameter K. From Figure \ref{fig:K_means_clustering}, 50 clusters are a reasonable choice since the distortion is dramatically decreasing after 50 clusters. 
