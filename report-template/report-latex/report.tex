@@ -46,10 +46,9 @@ Kenny Jin\\
 % MAIN ARTICLE GOES BELOW
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 %%%%%%%%% ABSTRACT
 \begin{abstract}
-Image recognition, especially from scratchy and noisy data, plays a significant role in machine learning. In our project we want to classify the hand-drawn doodles, with 345 categories in total, from Google Quick Draw. We construct different algorithms such as the k-nearest neighbors (KNN), Logistic Regression, and Convolutional Neural Network (CNN), and they each obtains an accuracy of {}. We also experimented different dimensionality reduction methods for KNN and Logistic Regression. By comparing model performances, we can gain an insight on which classifier is the most suitable for classifying doodles with a lot of categories.
+Image recognition, especially from scratchy and noisy data, plays a significant role in machine learning. In our project we want to classify the hand-drawn doodles, with 345 categories in total, from Google Quick, Draw!. We construct different algorithms such as the k-nearest neighbors (KNN), Logistic Regression, Random Forest,and Convolutional Neural Network (CNN), and they each obtains an accuracy of {26\%, 25\%, 31\%, 60\%}. We also experimented different dimensionality reduction methods for KNN and Logistic Regression. By comparing model performances, we can gain an insight on which classifier is the most suitable for classifying doodles with a lot of categories.
 \end{abstract}
 
 % 要用现在时
@@ -82,11 +81,11 @@ In our project, rather than building separate algorithms for each category or su
 
 \section{Related Work}
 
-Quick, Draw! dataset becomes popular among machine learning enthusiasts as soon as it has been released to the public. Similar to our tasks, many experts of machine learning have exploited different classification algorithms to recognize doodles. Harun-Ur-Rashid applied six machine learning algorithms on the dataset in a Kaggle competition: KNN, Random Forest, Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN\cite{kaggle}. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Harun-Ur-Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doodles into 345 categories which are all categories of the original dataset and to check whether algorithms can consistently remain high accuracies. 
+Quick, Draw! dataset becomes popular among machine learning enthusiasts as soon as it has been released to the public. Similar to our tasks, many experts in machine learning have exploited different classification algorithms to recognize doodles. Rashid applied six machine learning algorithms on the dataset in a Kaggle competition: KNN, Random Forest, Linear Support Vector Clustering (SVC), Gaussian Radial Basis Function SVC, Multi-Layer Perceptron, and CNN\cite{kaggle}. His goal was to classify doodles into only two categories and to analyze the performances of these models. When Rashid obtained relatively high classification acccuracies of all models, we attempt to classify doodles into 345 categories, which are all categories of the original dataset, instead of 2 categories and to check whether algorithms can consistently remain high accuracies. 
 
-Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories\cite{stanford}. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best on the computer vision problem; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their hyperparameters. 
+Guo, WoMa, and Xu experimented three algorithms on the dataset: 1-Closest Centroid (1-CC),  KNN with K-Means++, and CNN to classify doodles into all 345 unique categories\cite{stanford}. They set the accuracy of 1-CC as the baseline and compared the model performances of KNN and CNN. They obtained the accuracies of 23.6\%, 34.4\% and 62.1\% respectively; therefore, they concluded that CNN outperformed than other two algorithms. Surprised by the advantages of CNN on computer vision, we further explore two CNN models to see how CNN model can perform at the best on the image classification problem; so we tried two kinds of CNN models: LeNet-5 and ResNet-34 and tuned their hyperparameters. 
 
-Besides, there are some creative explorations on the dataset. For example, Ha and Sonnad used the public database from Quick, Draw! to find relations between the styles of drawing basic shapes and major language groups.They found that the drawing stroke orders were highly influenced by the languages and cultures. Inspired by their amazing conclusions, we try the mini-batch K-means Clustering algorithm to explore the similarities of drawing styles among all 345 distinct categories of distinct doodles. 
+Besides, there are some creative explorations on the dataset. For example, Ha and Sonnad used the public database from Quick, Draw! to find relations between the styles of drawing basic shapes and major language groups. They found that the drawing stroke orders were highly influenced by the languages and cultures. Inspired by their amazing conclusions, we try the mini-batch K-means Clustering algorithm to explore the similarities of drawing styles among all 345 distinct categories of distinct doodles. 
 
 
 \section{Proposed Method}
@@ -259,9 +258,27 @@ By looking at the discrepancy between training accuracy and test set accuracy, w
 %现在的0-1 loss function太严厉了， 可以给missclassified but similar categories some partial credits%
 %等等%
 
-For the exploratory data analysis part,we listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. %People tend to simplify complexity. For example, people use to describe animal migration, which is% 
+For the exploratory data analysis part,we listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. People tend to simplify abstract concepts by drawing. For example, people use a small number of strokes to describe the relatively complex concept: "animal migration," which is similar to the style of "rain" (see Figure \ref{fig:2}). We also find some unexpected categories share drawing styles like the categories "skull" and "mushroom." (see Figure \ref{fig:4})
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/2.jpg}
+\end{center}
+   \caption{An examples of drawings with abstract category }
+\label{fig:2}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+   \includegraphics[width=1\linewidth]{figures/4.jpg}
+\end{center}
+   \caption{"Skull" and "Mushroom" are regarded as a same group}
+\label{fig:4}
+\end{figure}
+
 
 There are some limitations of this study. Due to the time constraint, we are not able to include more data for this project. If more data were used, the results could be more reliable. Besides, we did not perform enough hyperparameter tunings for each model, thus the performance of each model might not be optimal. In the original dataset, additional time-stamp data are provided. This dataset contains people's order of drawing each stroke, thus might be useful for improving prediction performance. However, we did not include this part in our project due to the time constraints.
+
 
 \section{Conclusions}
 
