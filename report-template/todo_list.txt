@@ -1,5 +1,4 @@
-1. Related work
-2. Proposed Method: random forest
-3. Experiment: random forest & CNN
-4. Result and discussion: random forest & CNN
-5. Conclusion
+1. Proposed Method: random forest
+2. Experiment: random forest
+3. Result and discussion: random forest & CNN
+4. Conclusion
