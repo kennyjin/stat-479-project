@@ -131,7 +131,7 @@ There are many different types of CNNs, and we selected specifically 2 of them. 
 
 \subsection{Dataset}
 
-The original data set we have consists of 345 Numpy Bitmap files from Google, each .npy file consists of thousands of gray scale images for each category. Google has already pre-processed the data in .npy files by only keeping image data and centering the image with 28 * 28 pixels. Because it is not practical to run the whole data set on our computer, we decide to take a random sample of 1000 images from each category, and combined them to one single .npy file, which has 345,000 images in total. In fitting the models, we split our data set as 80\% for training and 20\% for testing using $train_test_split$ in Sci-Kit Learn stratified on labels. Each image is represented as having 784 dimensions, with values representing the intensity of each pixel, ranging from 0 - 255. We apply max-min normalization to the image data, and the range thus becomes 0 - 1. In addition, the label is represented as 0 - 344 for each category, rather than the exact text label. Global random seed is set at 123.
+The original data set we have consists of 345 Numpy Bitmap files from Google, each .npy file consists of thousands of gray scale images for each category. Google has already pre-processed the data in .npy files by only keeping image data and centering the image with 28 * 28 pixels. Because it is not practical to run the whole data set on our computer, we decide to take a random sample of 1000 images from each category, and combined them to one single .npy file, which has 345,000 images in total. In fitting the models, we split our data set as 80\% for training and 20\% for testing using $train\_test\_split$ in scikit-learn stratified on labels. Each image is represented as having 784 dimensions, with values representing the intensity of each pixel, ranging from 0 - 255. We apply max-min normalization to the image data, and the range thus becomes 0 - 1. In addition, the label is represented as 0 - 344 for each category, rather than the exact text label. Global random seed is set at 123.
 
 \subsection{Dimensionality Reduction}
 
@@ -258,23 +258,17 @@ By looking at the discrepancy between training accuracy and test set accuracy, w
 %现在的0-1 loss function太严厉了， 可以给missclassified but similar categories some partial credits%
 %等等%
 
-For the exploratory data analysis part,we listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. People tend to simplify abstract concepts by drawing. For example, people use a small number of strokes to describe the relatively complex concept: "animal migration," which is similar to the style of "rain" (see Figure \ref{fig:2}). We also find some unexpected categories share drawing styles like the categories "skull" and "mushroom." (see Figure \ref{fig:4})
+For the exploratory data analysis part,we listed the top 10 categories of drawings with most similar drawing styles are "line," "headphones," "rainbow," "pear," "triangle," "t-shirt," "The Eiffel Tower," "rifle," "tennis racquet," and "wine glass." These categories basically are common in daily life and usually have simple shapes so that people tend to agree with each other on how to draw them using a few strokes. People tend to simplify abstract concepts by drawing. For example, people use a small number of strokes to describe the relatively complex concept: "animal migration," which is similar to the style of "rain". We also find some unexpected categories share drawing styles like the categories "skull" and "mushroom." (see Figure \ref{fig:examples})
 
 \begin{figure}[ht]
 \begin{center}
-   \includegraphics[width=1\linewidth]{figures/2.jpg}
+   \includegraphics[width=1\linewidth]{figures/examples.jpg}
 \end{center}
-   \caption{An examples of drawings with abstract category }
-\label{fig:2}
+   \caption{Interesting findings}
+\label{fig:examples}
 \end{figure}
 
-\begin{figure}[ht]
-\begin{center}
-   \includegraphics[width=1\linewidth]{figures/4.jpg}
-\end{center}
-   \caption{"Skull" and "Mushroom" are regarded as a same group}
-\label{fig:4}
-\end{figure}
+
 
 
 There are some limitations of this study. Due to the time constraint, we are not able to include more data for this project. If more data were used, the results could be more reliable. Besides, we did not perform enough hyperparameter tunings for each model, thus the performance of each model might not be optimal. In the original dataset, additional time-stamp data are provided. This dataset contains people's order of drawing each stroke, thus might be useful for improving prediction performance. However, we did not include this part in our project due to the time constraints.
